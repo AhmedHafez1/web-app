@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "axios": "^1.2.1"
+  },
+  "scripts": {
+    "start:server": "json-server -w db.json",
+    "start:parcel": "npx parcel index.html"
+  }
+}

@@ -1,3 +1,5 @@
+import axios, { AxiosResponse } from 'axios';
+
 interface UserData {
   name?: string;
   age?: number;
@@ -29,5 +31,13 @@ export class User {
     if (!eventHandlers?.length) return;
 
     eventHandlers.forEach((callback) => callback());
+  }
+
+  fetch() {
+    axios
+      .get(`http://localhost:3000/users/${this.get('id')}`)
+      .then((response: AxiosResponse): void => {
+        this.set(response.data);
+      });
   }
 }

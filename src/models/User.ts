@@ -1,5 +1,5 @@
 import { Eventing } from './Eventing';
-import { Http as Sync } from './Sync';
+import { Http as Http } from './Http';
 
 export interface UserData {
   id?: number;
@@ -10,15 +10,5 @@ export interface UserData {
 const userUrl = 'http://localhost:3000/users';
 export class User {
   public eventing = new Eventing();
-  public sync = new Sync<UserData>(userUrl);
-
-  constructor(private data: UserData) {}
-
-  get(prop: string): string | number {
-    return this.data[prop];
-  }
-
-  set(update: UserData): void {
-    this.data = { ...this.data, ...update };
-  }
+  public http = new Http<UserData>(userUrl);
 }

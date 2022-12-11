@@ -1,6 +1,7 @@
 import axios, { AxiosResponse } from 'axios';
 
 interface UserData {
+  id?: number;
   name?: string;
   age?: number;
 }
@@ -9,6 +10,8 @@ type Callback = () => void;
 
 export class User {
   private events: { [key: string]: Callback[] } = {};
+  private url = 'http://localhost:3000/users/';
+
   constructor(private data: UserData) {}
 
   get(prop: string): string | number {
@@ -33,11 +36,20 @@ export class User {
     eventHandlers.forEach((callback) => callback());
   }
 
-  fetch() {
+  fetch(): void {
     axios
-      .get(`http://localhost:3000/users/${this.get('id')}`)
+      .get(`${this.url}${this.get('id')}`)
       .then((response: AxiosResponse): void => {
         this.set(response.data);
       });
+  }
+
+  save(): void {
+    const id = this.get('id');
+    if (id) {
+      axios.put(this.url + id, this.data);
+    } else {
+      axios.post(this.url, this.data);
+    }
   }
 }

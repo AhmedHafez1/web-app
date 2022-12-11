@@ -1,16 +1,16 @@
-import axios, { AxiosResponse } from 'axios';
+import { Eventing } from './Eventing';
+import { Http as Sync } from './Sync';
 
-interface UserData {
+export interface UserData {
   id?: number;
   name?: string;
   age?: number;
 }
 
-type Callback = () => void;
-
+const userUrl = 'http://localhost:3000/users';
 export class User {
-  private events: { [key: string]: Callback[] } = {};
-  private url = 'http://localhost:3000/users/';
+  public eventing = new Eventing();
+  public sync = new Sync<UserData>(userUrl);
 
   constructor(private data: UserData) {}
 
@@ -20,36 +20,5 @@ export class User {
 
   set(update: UserData): void {
     this.data = { ...this.data, ...update };
-  }
-
-  on(eventName: string, callback: Callback) {
-    const eventHandlers = this.events[eventName] || [];
-    eventHandlers.push(callback);
-    this.events[eventName] = eventHandlers;
-  }
-
-  trigger(eventName: string) {
-    const eventHandlers = this.events[eventName];
-
-    if (!eventHandlers?.length) return;
-
-    eventHandlers.forEach((callback) => callback());
-  }
-
-  fetch(): void {
-    axios
-      .get(`${this.url}${this.get('id')}`)
-      .then((response: AxiosResponse): void => {
-        this.set(response.data);
-      });
-  }
-
-  save(): void {
-    const id = this.get('id');
-    if (id) {
-      axios.put(this.url + id, this.data);
-    } else {
-      axios.post(this.url, this.data);
-    }
   }
 }

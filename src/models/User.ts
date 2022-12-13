@@ -1,7 +1,7 @@
-import { AxiosResponse } from "axios";
-import { Attributes } from "./Attributes";
-import { Eventing } from "./Eventing";
-import { Http as Http } from "./Http";
+import { AxiosResponse } from 'axios';
+import { Attributes } from './Attributes';
+import { Eventing } from './Eventing';
+import { Http as Http } from './Http';
 
 export interface UserData {
   id?: number;
@@ -9,7 +9,7 @@ export interface UserData {
   age?: number;
 }
 
-const userUrl = "http://localhost:3000/users";
+const userUrl = 'http://localhost:3000/users';
 export class User {
   public eventing = new Eventing();
   public http = new Http<UserData>(userUrl);
@@ -33,15 +33,22 @@ export class User {
 
   set(update: UserData): void {
     this.attributes.set(update);
-    this.trigger("change");
+    this.trigger('change');
   }
 
   fetch(): void {
-    const id = this.get("id");
+    const id = this.get('id');
     if (!id) throw new Error("can't fetch a user without an id");
 
     this.http.fetch(id).then((res: AxiosResponse) => {
       this.set(res.data);
     });
+  }
+
+  save(): void {
+    this.http
+      .save(this.attributes.getAll())
+      .then((res: AxiosResponse): void => this.trigger('save'))
+      .catch(() => this.trigger('error'));
   }
 }

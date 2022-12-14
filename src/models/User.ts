@@ -1,8 +1,8 @@
-import { AxiosResponse } from 'axios';
-import { Attributes } from './Attributes';
-import { Eventing } from './Eventing';
-import { ApiSync } from './ApiSync';
-import { Model } from './Model';
+import { AxiosResponse } from "axios";
+import { Attributes } from "./Attributes";
+import { Eventing } from "./Eventing";
+import { ApiSync } from "./ApiSync";
+import { Model } from "./Model";
 
 export interface UserData {
   id?: number;
@@ -10,7 +10,7 @@ export interface UserData {
   age?: number;
 }
 
-const userUrl = 'http://localhost:3000/users';
+const userUrl = "http://localhost:3000/users";
 export class User extends Model<UserData> {
   static buildUser(data: UserData): User {
     return new User(

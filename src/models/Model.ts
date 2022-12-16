@@ -1,4 +1,4 @@
-import { AxiosPromise, AxiosResponse } from 'axios';
+import { AxiosPromise, AxiosResponse } from "axios";
 
 export interface ModelAttributes<T> {
   get<K extends keyof T>(key: K): T[K];
@@ -34,11 +34,11 @@ export class Model<T extends HasId> {
 
   set(update: T): void {
     this.attributes.set(update);
-    this.trigger('change');
+    this.trigger("change");
   }
 
   fetch(): void {
-    const id = this.get('id');
+    const id = this.get("id");
     if (!id) throw new Error("can't fetch a user without an id");
 
     this.sync.fetch(id).then((res: AxiosResponse) => {
@@ -49,7 +49,7 @@ export class Model<T extends HasId> {
   save(): void {
     this.sync
       .save(this.attributes.getAll())
-      .then((res: AxiosResponse): void => this.trigger('save'))
-      .catch(() => this.trigger('error'));
+      .then((res: AxiosResponse): void => this.trigger("save"))
+      .catch(() => this.trigger("error"));
   }
 }

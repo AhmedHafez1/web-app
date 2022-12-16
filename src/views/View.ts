@@ -1,8 +1,7 @@
-export interface CanListen {
-  on(eventName: string, callback: () => void): void;
-}
+import { HasId } from "../models/ApiSync";
+import { Model } from "../models/Model";
 
-export abstract class View<T extends CanListen> {
+export abstract class View<T extends Model<K>, K extends HasId> {
   constructor(public parentElement: Element, public model: T) {
     this.onModelChange();
   }
